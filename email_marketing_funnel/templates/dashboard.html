@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+{% block title %}Dashboard – Email Marketing{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>EMAIL MARKETING</h1>
+    <p class="subtitle">Automation Funnel Dashboard</p>
+</div>
+
+<div class="dashboard-grid">
+
+    <!-- ═══════ LEFT CARD: Email Campaign ═══════ -->
+    <div class="card campaign-card">
+        <div class="card-header">
+            <h2>Email Campaign</h2>
+            <span class="badge badge-active">Active</span>
+        </div>
+
+        <div class="campaign-preview">
+            <div class="email-header">
+                <div class="logo-bar">LOGO</div>
+            </div>
+            <div class="email-body">
+                <h3 class="offer-title">Special Offer</h3>
+                <p class="offer-text">Don't miss this opportunity</p>
+                <a href="{{ url_for('shop_now') }}" class="btn-shop-now" id="shop-now-btn">
+                    Shop Now
+                </a>
+            </div>
+            <div class="email-content-lines">
+                <div class="line"></div>
+                <div class="line short"></div>
+                <div class="line"></div>
+            </div>
+        </div>
+
+        <div class="card-actions">
+            {% if campaign %}
+                <a href="{{ url_for('view_campaign', id=campaign.id) }}" class="btn btn-outline">View Details</a>
+                <form action="{{ url_for('send_campaign', id=campaign.id) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-primary" onclick="return confirm('Send this campaign to all active subscribers?')">
+                        Send Campaign
+                    </button>
+                </form>
+            {% else %}
+                <a href="{{ url_for('create_campaign') }}" class="btn btn-primary">Create Campaign</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- ═══════ MIDDLE CARD: Automation Workflow ═══════ -->
+    <div class="card workflow-card">
+        <div class="card-header">
+            <h2>Automation Workflow</h2>
+        </div>
+
+        <div class="workflow-section">
+            <h4 class="section-label">Email Templates</h4>
+            <div class="templates-row">
+                {% for t in templates[:2] %}
+                <a href="{{ url_for('view_template', id=t.id) }}" class="template-box">
+                    <div class="template-icon">
+                        {% if t.category == 'welcome' %}
+                            <span class="icon-person">👤</span>
+                        {% else %}
+                            <span class="icon-doc">📄</span>
+                        {% endif %}
+                    </div>
+                    <span class="template-name">{{ t.name }}</span>
+                </a>
+                {% else %}
+                <div class="template-box">
+                    <div class="template-icon"><span class="icon-person">👤</span></div>
+                    <span class="template-name">Welcome</span>
+                </div>
+                <div class="template-box">
+                    <div class="template-icon"><span class="icon-doc">📄</span></div>
+                    <span class="template-name">Newsletter</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="workflow-flow">
+            <div class="flow-arrow">▼</div>
+            <div class="decision-diamond">
+                <span>Wait</span>
+            </div>
+            <div class="decision-branches">
+                <div class="branch yes-branch">
+                    <span class="branch-label yes">Yes</span>
+                    <div class="branch-line"></div>
+                </div>
+                <div class="branch no-branch">
+                    <span class="branch-label no">No</span>
+                    <div class="branch-line"></div>
+                </div>
+            </div>
+            <div class="flow-arrow">▼</div>
+            <a href="{{ url_for('shop_now') }}" class="send-offer-btn">
+                Send offer
+            </a>
+        </div>
+
+        <div class="card-actions">
+            <a href="{{ url_for('list_workflows') }}" class="btn btn-outline">Manage Workflows</a>
+            {% if workflow %}
+                <span class="workflow-status">{{ workflow.name }} · {% if workflow.is_active %}🟢 Active{% else %}⚪ Inactive{% endif %}</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- ═══════ RIGHT CARD: Email Performance ═══════ -->
+    <div class="card performance-card">
+        <div class="card-header">
+            <h2>Email Performance</h2>
+        </div>
+
+        <div class="perf-gauge">
+            <div class="gauge-circle" data-rate="{{ open_rate }}">
+                <svg viewBox="0 0 36 36" class="circular-chart">
+                    <path class="circle-bg"
+                          d="M18 2.0845
+                             a 15.9155 15.9155 0 0 1 0 31.831
+                             a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                    <path class="circle"
+                          stroke-dasharray="{{ open_rate }}, 100"
+                          d="M18 2.0845
+                             a 15.9155 15.9155 0 0 1 0 31.831
+                             a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                    <text x="18" y="20.5" class="percentage">{{ open_rate }}%</text>
+                </svg>
+                <span class="gauge-label">Open Rate</span>
+            </div>
+        </div>
+
+        <div class="perf-metrics">
+            <div class="metric">
+                <span class="metric-label">Click Rate</span>
+                <span class="metric-value">{{ click_rate }}%</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Unsubscribe Rate</span>
+                <span class="metric-value">{{ unsub_rate }}%</span>
+            </div>
+        </div>
+
+        <div class="subscribers-chart">
+            <h4 class="section-label">Subscribers</h4>
+            <div class="bar-chart" id="subs-chart">
+                {% for val in chart_data %}
+                <div class="bar" style="height: {{ (val / (chart_data|max or 1) * 100) | int }}%;" title="{{ val }} new">
+                    <span class="bar-value">{{ val }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="chart-footer">
+                <span>Last 7 days growth</span>
+                <strong>{{ total_subs }} active</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Stats Row -->
+<div class="stats-row">
+    <div class="stat-box">
+        <span class="stat-number">{{ total_subs }}</span>
+        <span class="stat-label">Active Subscribers</span>
+    </div>
+    <div class="stat-box">
+        <span class="stat-number">{{ total_campaigns }}</span>
+        <span class="stat-label">Campaigns</span>
+    </div>
+    <div class="stat-box">
+        <span class="stat-number">{{ active_workflows }}</span>
+        <span class="stat-label">Active Workflows</span>
+    </div>
+    <div class="stat-box">
+        <span class="stat-number">{{ open_rate }}%</span>
+        <span class="stat-label">Avg Open Rate</span>
+    </div>
+</div>
+{% endblock %}

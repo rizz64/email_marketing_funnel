@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Automation Workflows{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Automation Workflows</h1>
+    <p class="subtitle">Visual automation funnels</p>
+</div>
+
+<div class="workflows-list">
+    {% for wf in workflows %}
+    <div class="card workflow-item">
+        <div class="wf-header">
+            <h3>{{ wf.name }}</h3>
+            <span class="badge {% if wf.is_active %}badge-active{% else %}badge-inactive{% endif %}">
+                {% if wf.is_active %}Active{% else %}Inactive{% endif %}
+            </span>
+        </div>
+        <p>{{ wf.description }}</p>
+        <p class="wf-trigger"><strong>Trigger:</strong> {{ wf.trigger }}</p>
+
+        <div class="wf-steps">
+            {% if wf.steps %}
+                {% for step in wf.steps %}
+                <div class="step-chip">
+                    {% if step.type == 'send_template' %}
+                        📧 Send: {{ step.template }}
+                    {% elif step.type == 'wait' %}
+                        ⏳ Wait {{ step.days }} day(s)
+                    {% elif step.type == 'condition' %}
+                        💎 If {{ step.if }} → Yes: {{ step.yes }} / No: {{ step.no }}
+                    {% else %}
+                        {{ step }}
+                    {% endif %}
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <form action="{{ url_for('toggle_workflow', id=wf.id) }}" method="POST" style="margin-top:1rem;">
+            <button type="submit" class="btn btn-outline">
+                {% if wf.is_active %}Deactivate{% else %}Activate{% endif %}
+            </button>
+        </form>
+    </div>
+    {% else %}
+    <p>No workflows yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

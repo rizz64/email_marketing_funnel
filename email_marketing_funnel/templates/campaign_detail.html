@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}{{ campaign.title }} – Campaign{% endblock %}
+
+{% block content %}
+<div class="detail-page">
+    <div class="page-header">
+        <a href="{{ url_for('dashboard') }}" class="back-btn">← Dashboard</a>
+        <h1>{{ campaign.title }}</h1>
+        <span class="badge badge-{{ campaign.status }}">{{ campaign.status|capitalize }}</span>
+    </div>
+
+    <div class="detail-grid">
+        <div class="card">
+            <h3>Campaign Info</h3>
+            <table class="info-table">
+                <tr><td>Subject</td><td>{{ campaign.subject }}</td></tr>
+                <tr><td>CTA Text</td><td>{{ campaign.cta_text }}</td></tr>
+                <tr><td>CTA URL</td><td><a href="{{ campaign.cta_url }}" target="_blank">{{ campaign.cta_url }}</a></td></tr>
+                <tr><td>Created</td><td>{{ campaign.created_at.strftime('%d %b %Y, %H:%M') }}</td></tr>
+                <tr><td>Sent At</td><td>{{ campaign.sent_at.strftime('%d %b %Y, %H:%M') if campaign.sent_at else '—' }}</td></tr>
+            </table>
+        </div>
+
+        <div class="card">
+            <h3>Performance</h3>
+            <div class="perf-grid">
+                <div class="perf-item">
+                    <span class="big-num">{{ campaign.open_rate() }}%</span>
+                    <span>Open Rate</span>
+                </div>
+                <div class="perf-item">
+                    <span class="big-num">{{ campaign.click_rate() }}%</span>
+                    <span>Click Rate</span>
+                </div>
+                <div class="perf-item">
+                    <span class="big-num">{{ campaign.opens }}</span>
+                    <span>Opens</span>
+                </div>
+                <div class="perf-item">
+                    <span class="big-num">{{ campaign.clicks }}</span>
+                    <span>Clicks</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Email Preview</h3>
+        <div class="email-preview-box">
+            {{ campaign.body_html|safe }}
+        </div>
+    </div>
+
+    <div class="card-actions" style="margin-top:1.5rem;">
+        <form action="{{ url_for('send_campaign', id=campaign.id) }}" method="POST">
+            <button type="submit" class="btn btn-primary" onclick="return confirm('Send to all active subscribers?')">
+                Send / Re-send Campaign
+            </button>
+        </form>
+        <a href="{{ url_for('shop_now') }}" class="btn btn-outline">View Offer Landing</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Add Subscriber{% endblock %}
+
+{% block content %}
+<div class="form-page">
+    <div class="page-header">
+        <a href="{{ url_for('list_subscribers') }}" class="back-btn">← Subscribers</a>
+        <h1>Add New Subscriber</h1>
+    </div>
+
+    <form method="POST" class="card form-card">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Full name">
+        </div>
+        <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" id="email" name="email" required placeholder="user@example.com">
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Add Subscriber</button>
+            <a href="{{ url_for('list_subscribers') }}" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Special Offer – Enroll Now{% endblock %}
+
+{% block content %}
+<div class="shop-page">
+    <div class="shop-hero">
+        <h1>🔥 Special Offer</h1>
+        <p class="hero-sub">Don't miss this opportunity to master Digital Marketing</p>
+        <p class="hero-desc">Join Uncodemy's industry-ready Digital Marketing Training Courses and boost your career with hands-on projects, live sessions & placement support.</p>
+    </div>
+
+    <div class="course-cards">
+        <!-- Noida Course -->
+        <div class="course-card noida">
+            <div class="course-badge">Noida</div>
+            <h2>Digital Marketing Training Course in Noida</h2>
+            <ul class="course-features">
+                <li>✅ Complete SEO, SEM, Social Media & Analytics</li>
+                <li>✅ Live Projects & Case Studies</li>
+                <li>✅ Placement Assistance</li>
+                <li>✅ Flexible Batches (Weekday / Weekend)</li>
+            </ul>
+            <div class="course-price">
+                <span class="old-price">₹45,000</span>
+                <span class="new-price">₹31,500</span>
+                <span class="discount">30% OFF</span>
+            </div>
+            <a href="https://uncodemy.com/course/digital-marketing-training-course-in-noida" 
+               target="_blank" rel="noopener" class="btn btn-primary btn-lg">
+                Enroll in Noida Batch →
+            </a>
+        </div>
+
+        <!-- Delhi Course -->
+        <div class="course-card delhi">
+            <div class="course-badge">Delhi</div>
+            <h2>Digital Marketing Training Course in Delhi</h2>
+            <ul class="course-features">
+                <li>✅ Complete SEO, SEM, Social Media & Analytics</li>
+                <li>✅ Live Projects & Case Studies</li>
+                <li>✅ Placement Assistance</li>
+                <li>✅ Flexible Batches (Weekday / Weekend)</li>
+            </ul>
+            <div class="course-price">
+                <span class="old-price">₹45,000</span>
+                <span class="new-price">₹31,500</span>
+                <span class="discount">30% OFF</span>
+            </div>
+            <a href="https://uncodemy.com/course/digital-marketing-training-course-in-delhi" 
+               target="_blank" rel="noopener" class="btn btn-success btn-lg">
+                Enroll in Delhi Batch →
+            </a>
+        </div>
+    </div>
+
+    <div class="back-link">
+        <a href="{{ url_for('dashboard') }}">← Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}

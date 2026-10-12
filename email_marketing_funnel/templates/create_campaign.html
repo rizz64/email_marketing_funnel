@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Create Campaign{% endblock %}
+
+{% block content %}
+<div class="form-page">
+    <div class="page-header">
+        <a href="{{ url_for('dashboard') }}" class="back-btn">← Dashboard</a>
+        <h1>Create New Campaign</h1>
+    </div>
+
+    <form method="POST" class="card form-card">
+        <div class="form-group">
+            <label for="title">Campaign Title *</label>
+            <input type="text" id="title" name="title" required placeholder="e.g. Special Offer – Digital Marketing">
+        </div>
+
+        <div class="form-group">
+            <label for="subject">Email Subject *</label>
+            <input type="text" id="subject" name="subject" required placeholder="🔥 Don't miss this opportunity!">
+        </div>
+
+        <div class="form-group">
+            <label for="cta_text">CTA Button Text</label>
+            <input type="text" id="cta_text" name="cta_text" value="Shop Now">
+        </div>
+
+        <div class="form-group">
+            <label for="cta_url">CTA URL (where Shop Now goes)</label>
+            <select id="cta_url" name="cta_url">
+                <option value="https://uncodemy.com/course/digital-marketing-training-course-in-noida">
+                    Uncodemy – Noida Course
+                </option>
+                <option value="https://uncodemy.com/course/digital-marketing-training-course-in-delhi">
+                    Uncodemy – Delhi Course
+                </option>
+                <option value="{{ url_for('shop_now') }}">
+                    Internal Offer Landing (both courses)
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="body_html">Email Body (HTML) *</label>
+            <textarea id="body_html" name="body_html" rows="12" required placeholder="Paste or write HTML content...">
+<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;text-align:center;">
+    <h1 style="color:#1e40af;">Special Offer</h1>
+    <p style="font-size:18px;">Don't miss this opportunity!</p>
+    <p>Enroll in Uncodemy's Digital Marketing Training and transform your career.</p>
+    <div style="margin:24px 0;">
+        <a href="https://uncodemy.com/course/digital-marketing-training-course-in-noida"
+           style="background:#2563eb;color:white;padding:14px 28px;text-decoration:none;border-radius:8px;margin:8px;display:inline-block;">
+           Noida Batch – Enroll Now</a>
+        <a href="https://uncodemy.com/course/digital-marketing-training-course-in-delhi"
+           style="background:#059669;color:white;padding:14px 28px;text-decoration:none;border-radius:8px;margin:8px;display:inline-block;">
+           Delhi Batch – Enroll Now</a>
+    </div>
+</div>
+            </textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="status">Status</label>
+            <select id="status" name="status">
+                <option value="draft">Draft</option>
+                <option value="active">Active</option>
+                <option value="scheduled">Scheduled</option>
+            </select>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Create Campaign</button>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

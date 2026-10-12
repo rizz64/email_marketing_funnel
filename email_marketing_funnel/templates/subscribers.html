@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Subscribers{% endblock %}
+
+{% block content %}
+<div class="page-header flex-between">
+    <div>
+        <h1>Subscribers</h1>
+        <p class="subtitle">Manage your email list</p>
+    </div>
+    <a href="{{ url_for('add_subscriber') }}" class="btn btn-primary">+ Add Subscriber</a>
+</div>
+
+<div class="filter-bar">
+    <a href="?status=all" class="filter-btn {% if current_status == 'all' %}active{% endif %}">All</a>
+    <a href="?status=active" class="filter-btn {% if current_status == 'active' %}active{% endif %}">Active</a>
+    <a href="?status=unsubscribed" class="filter-btn {% if current_status == 'unsubscribed' %}active{% endif %}">Unsubscribed</a>
+</div>
+
+<div class="card table-card">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Source</th>
+                <th>Joined</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sub in pagination.items %}
+            <tr>
+                <td>{{ sub.name or '—' }}</td>
+                <td>{{ sub.email }}</td>
+                <td>
+                    <span class="badge {% if sub.status == 'active' %}badge-active{% else %}badge-inactive{% endif %}">
+                        {{ sub.status }}
+                    </span>
+                </td>
+                <td>{{ sub.source }}</td>
+                <td>{{ sub.created_at.strftime('%d %b %Y') }}</td>
+                <td>
+                    {% if sub.status == 'active' %}
+                    <form action="{{ url_for('unsubscribe', id=sub.id) }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn-link" onclick="return confirm('Unsubscribe this user?')">Unsubscribe</button>
+                    </form>
+                    {% else %}
+                    —
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="6" style="text-align:center;">No subscribers found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if pagination.pages > 1 %}
+<div class="pagination">
+    {% if pagination.has_prev %}
+        <a href="?page={{ pagination.prev_num }}&status={{ current_status }}" class="btn btn-outline">← Prev</a>
+    {% endif %}
+    <span>Page {{ pagination.page }} of {{ pagination.pages }}</span>
+    {% if pagination.has_next %}
+        <a href="?page={{ pagination.next_num }}&status={{ current_status }}" class="btn btn-outline">Next →</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

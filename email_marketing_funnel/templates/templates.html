@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Email Templates{% endblock %}
+
+{% block content %}
+<div class="page-header flex-between">
+    <div>
+        <h1>Email Templates</h1>
+        <p class="subtitle">Reusable templates for automation</p>
+    </div>
+    <a href="{{ url_for('create_template') }}" class="btn btn-primary">+ New Template</a>
+</div>
+
+<div class="templates-grid">
+    {% for t in templates %}
+    <a href="{{ url_for('view_template', id=t.id) }}" class="template-card">
+        <div class="template-card-icon">
+            {% if t.category == 'welcome' %}👤
+            {% elif t.category == 'newsletter' %}📄
+            {% else %}🎁{% endif %}
+        </div>
+        <h3>{{ t.name }}</h3>
+        <span class="badge">{{ t.category }}</span>
+        <p class="template-subject">{{ t.subject }}</p>
+    </a>
+    {% else %}
+    <p>No templates yet. <a href="{{ url_for('create_template') }}">Create one</a></p>
+    {% endfor %}
+</div>
+{% endblock %}

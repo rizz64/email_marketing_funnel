@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}{{ template.name }} – Template{% endblock %}
+
+{% block content %}
+<div class="detail-page">
+    <div class="page-header">
+        <a href="{{ url_for('list_templates') }}" class="back-btn">← Templates</a>
+        <h1>{{ template.name }}</h1>
+        <span class="badge">{{ template.category }}</span>
+    </div>
+
+    <div class="card">
+        <p><strong>Subject:</strong> {{ template.subject }}</p>
+        <hr>
+        <div class="email-preview-box">
+            {{ template.body_html|safe }}
+        </div>
+    </div>
+</div>
+{% endblock %}
